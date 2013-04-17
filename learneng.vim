@@ -18,7 +18,7 @@ let g:loaded_learneng=1
 "config
 
 let s:save_cpo = &cpo
-"let s:tmpfile="/tmp/my/2.txt"
+let s:tmpfile="/tmp/my/2.txt"
 set cpo&vim
 
 if !hasmapto('<Plug>LearnengTest')
@@ -31,10 +31,31 @@ function s:Test()
     let s:file_path=input("please input your file path:")
     echo s:file_path
     "read file_path
-    "let s:cmd= "cat ". s:file_path ." | grep \"(\" | awk -F\"]\" '{print $2}' | awk -F\"(\" '{print $2,\"\", $1}' >" . s:tmpfile
-    "echo s:cmd
-    "read s:tmpfile
+    let s:cmd= " !cat ". s:file_path ." | grep \"(\" | awk -F\"]\" '{print $2}' | awk -F\"(\" '{print $2,\"\", $1}' >" . s:tmpfile
+    echo s:cmd
+    exe s:cmd
+    "let s:cmd_test=" !ls > /tmp/my/3.txt"
+    "exe s:cmd_test
+    echo s:tmpfile
+    "read /tmp/my/2.txt
+    "call Myread("/tmp/my/2.txt",3)
+    call ReadFileToVariable()
 endfunction
+
+function Myread(filename,linenumber)
+    let l:cmd="r! sed -n ".a:linenumber.",".a:linenumber."p ".a:filename
+    echo l:cmd
+    let l:text=exe l:cmd
+endfunction
+
+function MyCurrentLine()
+    echo getline(".")
+endf
+func ReadFileToVariable()
+
+    let a=system("cat /tmp/my/1.lrc")
+    echo a
+endf
 
 function s:Test3()
     let input_str=input("please input your answer:")
