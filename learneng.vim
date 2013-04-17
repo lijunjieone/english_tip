@@ -29,17 +29,20 @@ noremap <SID>Test :call <SID>Test()<CR>
 
 function s:Test()
     let s:file_path=input("please input your file path:")
-    echo s:file_path
+    "echo s:file_path
     "read file_path
-    let s:cmd= " !cat ". s:file_path ." | grep \"(\" | awk -F\"]\" '{print $2}' | awk -F\"(\" '{print $2,\"\", $1}' >" . s:tmpfile
-    echo s:cmd
-    exe s:cmd
+    "let s:cmd= " !cat ". s:file_path ." | grep \"(\" | awk -F\"]\" '{print $2}' | awk -F\"(\" '{print $2,\"\", $1}' >" . s:tmpfile
+    "echo s:cmd
+    "exe s:cmd
     "let s:cmd_test=" !ls > /tmp/my/3.txt"
     "exe s:cmd_test
-    echo s:tmpfile
+    "echo s:tmpfile
     "read /tmp/my/2.txt
     "call Myread("/tmp/my/2.txt",3)
-    call ReadFileToVariable()
+    "call ReadFileToVariable()
+    let l:content=ReadFile("/tmp/my/2.txt")
+    setline(".",l:content)
+
 endfunction
 
 function Myread(filename,linenumber)
@@ -51,8 +54,13 @@ endfunction
 function MyCurrentLine()
     echo getline(".")
 endf
-func ReadFileToVariable()
 
+func ReadFile(filename)
+    let l:content=system("cat ".a:filename)
+    "echo l:content
+    return l:content
+endf
+func ReadFileToVariable()
     let a=system("cat /tmp/my/1.lrc")
     echo a
 endf
