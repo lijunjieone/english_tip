@@ -27,15 +27,16 @@ endif
 noremap <unique> <script> <Plug>LearnengTest <SID>Test
 noremap <SID>Test :call <SID>Test()<CR>
 
-function s:Test3()
+function s:Test()
     let s:file_path=input("please input your file path:")
+    echo s:file_path
     "read file_path
-    let s:cmd= "cat ". s:file_path ." | grep \"(\" | awk -F\"]\" '{print $2}' | awk -F\"(\" '{print $2,\"\", $1}' >" . s:tmpfile
-    echo s:cmd
+    "let s:cmd= "cat ". s:file_path ." | grep \"(\" | awk -F\"]\" '{print $2}' | awk -F\"(\" '{print $2,\"\", $1}' >" . s:tmpfile
+    "echo s:cmd
     "read s:tmpfile
 endfunction
 
-function s:Test()
+function s:Test3()
     let input_str=input("please input your answer:")
     echo input_str
 endfunction
