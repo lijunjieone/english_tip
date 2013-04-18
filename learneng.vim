@@ -46,14 +46,24 @@ function s:Test()
     let l:index =0
     while l:index<len(l:content_list)
         let l:item=l:content_list[l:index]
-        if l:index==6
-            call setline(l:index,l:item)
+        echo l:item
+        try
             call MySplit(l:item)
+        catch
+            echo "catch",l:item
+        endtry
+
+        if l:index==4
+            "call setline(l:index,l:item)
+            let mylist= MySplit(l:item)
+            if mylist[0]
+               call setline(l:index,mylist[2])
+               let l:index=l:index+1
+               call setline(l:index,mylist[1])
+            endif
         else
-            call setline(l:index,l:index)
-        endif
-        if l:index>10
-            break
+            echo "catch",l:item
+            call setline(l:index,l:item)
         endif
         let l:index = l:index + 1
     endwhile
@@ -64,8 +74,23 @@ function s:Test()
 endfunction
 
 func MySplit(content)
-    let words=split(a:content,"[(.*)](.*)(.*)")
-    echo words
+    if type(a:content)
+        return [0,"",""]
+    endif
+    let l:good_content=split(a:content,"]")
+    "echo l:good_content
+    if   type(l:good_content)!=3 || len(l:good_content)==1
+        return [0,"",""]
+    endif
+    "echo "good_content",good_content,type(good_content)
+    let good_word=l:good_content[1]
+    "echo good_word
+    let words=split(good_word,"(")
+    let first_word=string(words[0:-2])
+    let second_word=words[-1]
+    "echo first_word
+    "echo second_word
+    return [1,first_word,second_word]
 endf
 
 function Myread(filename,linenumber)
