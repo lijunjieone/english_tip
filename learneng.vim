@@ -40,10 +40,33 @@ function s:Test()
     "read /tmp/my/2.txt
     "call Myread("/tmp/my/2.txt",3)
     "call ReadFileToVariable()
-    let l:content=ReadFile("/tmp/my/2.txt")
-    setline(".",l:content)
+    "let l:content=ReadFile("/tmp/my/2.txt")
+    let l:content=ReadFile(s:file_path)
+    let l:content_list=split(l:content,"\n")
+    let l:index =0
+    while l:index<len(l:content_list)
+        let l:item=l:content_list[l:index]
+        if l:index==6
+            call setline(l:index,l:item)
+            call MySplit(l:item)
+        else
+            call setline(l:index,l:index)
+        endif
+        if l:index>10
+            break
+        endif
+        let l:index = l:index + 1
+    endwhile
+        
+
+    "call setline(".",l:content_list)
 
 endfunction
+
+func MySplit(content)
+    let words=split(a:content,"[(.*)](.*)(.*)")
+    echo words
+endf
 
 function Myread(filename,linenumber)
     let l:cmd="r! sed -n ".a:linenumber.",".a:linenumber."p ".a:filename
