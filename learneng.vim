@@ -18,7 +18,7 @@ let g:loaded_learneng=1
 "config
 
 let s:save_cpo = &cpo
-let s:tmpfile="/tmp/my/2.txt"
+"let s:tmpfile="/tmp/my/2.txt"
 let s:index=0
 set cpo&vim
 
@@ -109,11 +109,8 @@ func MySplit(content)
 endf
 
    
-
-
-
 func ReadFile(filename)
-    let l:content=system("cat ".a:filename)
+    let l:content=system("cat ".a:filename. " | grep '('")
     "echo l:content
     return l:content
 endf
