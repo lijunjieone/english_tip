@@ -54,6 +54,7 @@ func s:ReadAnswerAndQuestion()
     else
         call setline(line+1,s:mycontent[s:index][1])
         call setline(line+2,s:mycontent[s:index+1][2])
+        call cursor(line+3,0)
         let s:index=s:index+1
     endif
     "echo s:index
@@ -83,21 +84,35 @@ func GetContentList(file_path)
         " l:result_list[l:index]=l:tmp
         call add(result_list,l:tmp)
         let l:index=l:index+1
+        if l:index >10
+            "break
+        endif
     endwhile
     "echo l:result_list
 
     return l:result_list
 endfunc
-
 func MySplit(content)
     "echo a:content
     "echo type(a:content)
     let l:good_content=split(a:content,"]")
     "echo l:good_content
-    if   type(l:good_content)!=3 || len(l:good_content)==1
-        return [0,"",""]
-    endif
-    "echo "good_content",good_content,type(good_content)
+    let good_word=l:good_content[1]
+    "echo good_word
+    let words=split(good_word,"(")
+    let first_word=join(words[0:-2])
+    let second_word=substitute(words[-1],")","",'g')
+    "echo first_word
+    "echo second_word
+    return [1,first_word,second_word]
+endf
+
+
+func MySplit2(content)
+    "echo a:content
+    "echo type(a:content)
+    let l:good_content=split(a:content,"]")
+    "echo l:good_content
     let good_word=l:good_content[1]
     "echo good_word
     let words=split(good_word,"(")
