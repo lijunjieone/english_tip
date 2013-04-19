@@ -22,7 +22,7 @@ let s:tmpfile="/tmp/my/2.txt"
 let s:index=0
 set cpo&vim
 
-if !hasmapto('<Plug>LearnengTest')
+if !hasmapto('<Plug>LearnengMain')
     map <unique> <Leader>l <Plug>LearnengMain
     map <unique> <Leader>lq <Plug>LearnengReadQuestion
     map <unique> <Leader>la <Plug>LearnengReadAnswer
@@ -40,7 +40,7 @@ noremap <unique> <script> <Plug>LearnengReadAnswerAndQuestion <SID>ReadAnswerAnd
 noremap <SID>ReadAnswerAndQuestion :call <SID>ReadAnswerAndQuestion()<CR>
 
 
-function s:Main()
+func s:Main()
     let l:file_path=input("please input your file path:")
     let s:mycontent=GetContentList(l:file_path)
     "echo s:mycontent
@@ -48,14 +48,18 @@ endf
 
 func s:ReadAnswerAndQuestion()
     let line=line(".")
-    echo line
-    call setline(line+1,s:mycontent[s:index][1])
-    call setline(line+2,s:mycontent[s:index+1][2])
-    let s:index=s:index+1
+    "echo line
+    if line == 1
+        call setline(line,s:mycontent[s:index][2])
+    else
+        call setline(line+1,s:mycontent[s:index][1])
+        call setline(line+2,s:mycontent[s:index+1][2])
+        let s:index=s:index+1
+    endif
     "echo s:index
 endf
 
-function s:ReadQuestion()
+func s:ReadQuestion()
     call setline(".",s:mycontent[s:index][2])
     let s:index=s:index+1
 endf
@@ -64,7 +68,7 @@ func s:ReadAnswer()
 endf
 
 
-function GetContentList(file_path)
+func GetContentList(file_path)
 
     let l:content=ReadFile(a:file_path)
     "let l:content=ReadFile("/tmp/my/2.lrc")
@@ -74,7 +78,7 @@ function GetContentList(file_path)
     while l:index<len(l:content_list)
         let l:item=l:content_list[l:index]
         "echo l:item
-        let l:tmp=MySplit2(l:item)
+        let l:tmp=MySplit(l:item)
         "echo l:tmp
         " l:result_list[l:index]=l:tmp
         call add(result_list,l:tmp)
@@ -83,9 +87,9 @@ function GetContentList(file_path)
     "echo l:result_list
 
     return l:result_list
-endfunction
+endfunc
 
-func MySplit2(content)
+func MySplit(content)
     "echo a:content
     "echo type(a:content)
     let l:good_content=split(a:content,"]")
@@ -106,77 +110,13 @@ endf
 
    
 
-function s:Test2()
-    let s:file_path=input("please input your file path:")
-    "echo s:file_path
-    "read file_path
-    "let s:cmd= " !cat ". s:file_path ." | grep \"(\" | awk -F\"]\" '{print $2}' | awk -F\"(\" '{print $2,\"\", $1}' >" . s:tmpfile
-    "echo s:cmd
-    "exe s:cmd
-    "let s:cmd_test=" !ls > /tmp/my/3.txt"
-    "exe s:cmd_test
-    "echo s:tmpfile
-    "read /tmp/my/2.txt
-    "call Myread("/tmp/my/2.txt",3)
-    "call ReadFileToVariable()
-    "let l:content=ReadFile("/tmp/my/2.txt")
-    let l:content=ReadFile(s:file_path)
-    let l:content_list=split(l:content,"\n")
-    let l:index =0
-    while l:index<len(l:content_list)
 
-        let l:item=l:content_list[l:index]
-        "echo l:item
-        "echo l:index
-        "call MySplit(l:item)
-
-        if l:index==10
-            call setline(l:index,l:item)
-            "call MySplit(l:item)
-            "echo l:item
-            "if mylist[0]
-               "call setline(l:index,mylist[2])
-               "let l:index=l:index+1
-               "call setline(l:index,mylist[1])
-            "endif
-        else
-            call setline(l:index,l:item)
-        endif
-        let l:index = l:index + 1
-    endwhile
-        
-
-    "call setline(".",l:content_list)
-
-endfunction
-func MySplit(content)
-    echo a:content
-endf
-
-function Myread(filename,linenumber)
-    let l:cmd="r! sed -n ".a:linenumber.",".a:linenumber."p ".a:filename
-    echo l:cmd
-    let l:text=exe l:cmd
-endfunction
-
-function MyCurrentLine()
-    echo getline(".")
-endf
 
 func ReadFile(filename)
     let l:content=system("cat ".a:filename)
     "echo l:content
     return l:content
 endf
-func ReadFileToVariable()
-    let a=system("cat /tmp/my/1.lrc")
-    echo a
-endf
-
-function s:Test3()
-    let input_str=input("please input your answer:")
-    echo input_str
-endfunction
 
 let &cpo=s:save_cpo
 
