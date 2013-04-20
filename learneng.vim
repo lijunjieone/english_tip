@@ -24,18 +24,18 @@ set cpo&vim
 
 if !hasmapto('<Plug>LearnengMain')
     map <unique> <Leader>l <Plug>LearnengMain
-    map <unique> <Leader>lq <Plug>LearnengReadQuestion
-    map <unique> <Leader>la <Plug>LearnengReadAnswer
+    "map <unique> <Leader>lq <Plug>LearnengReadQuestion
+    "map <unique> <Leader>la <Plug>LearnengReadAnswer
     map <unique> <Leader>lf <Plug>LearnengReadAnswerAndQuestion
     map <unique> <Leader>li <Plug>LearnengSetIndex
 endif
 noremap <unique> <script> <Plug>LearnengMain <SID>Main
 noremap <SID>Main :call <SID>Main()<CR>
 
-noremap <unique> <script> <Plug>LearnengReadQuestion <SID>ReadQuestion
-noremap <SID>ReadQuestion :call <SID>ReadQuestion()<CR>
-noremap <unique> <script> <Plug>LearnengReadAnswer <SID>ReadAnswer
-noremap <SID>ReadAnswer :call <SID>ReadAnswer()<CR>
+"noremap <unique> <script> <Plug>LearnengReadQuestion <SID>ReadQuestion
+"noremap <SID>ReadQuestion :call <SID>ReadQuestion()<CR>
+"noremap <unique> <script> <Plug>LearnengReadAnswer <SID>ReadAnswer
+"noremap <SID>ReadAnswer :call <SID>ReadAnswer()<CR>
 
 noremap <unique> <script> <Plug>LearnengReadAnswerAndQuestion <SID>ReadAnswerAndQuestion
 noremap <SID>ReadAnswerAndQuestion :call <SID>ReadAnswerAndQuestion()<CR>
@@ -56,8 +56,6 @@ func s:Main()
             
     let s:mycontent=GetContentList(s:file_path)
 endf
-
-
 
 
 func s:ReadAnswerAndQuestion()
