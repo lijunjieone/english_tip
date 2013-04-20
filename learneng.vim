@@ -20,8 +20,6 @@ let g:loaded_learneng=1
 let s:save_cpo = &cpo
 "let s:tmpfile="/tmp/my/2.txt"
 let s:index=0
-let s:index_file="/tmp/index_file.txt"
-let s:index_map={}
 set cpo&vim
 
 if !hasmapto('<Plug>LearnengMain')
@@ -57,8 +55,6 @@ func s:Main()
     endif
             
     let s:mycontent=GetContentList(s:file_path)
-    "let s:index=l:index_store
-    "echo s:mycontent
 endf
 
 
@@ -74,54 +70,17 @@ func s:ReadAnswerAndQuestion()
         call setline(line+2,s:index+1." ".s:mycontent[s:index+1][2])
         call cursor(line+3,0)
         let s:index=s:index+1
-        "call WriteIndex()
-        "call InsertCmd("ls")
     endif
-    "echo s:index
-endf
-
-func WriteIndex()
-    "echo s:index_file
-    "echo s:index
-    "exe ":echo ".s:index."> ".s:index_file
-    "let s:index_map[s:index_file]=s:index
-    let s:index_map["test"]=s:index 
-    echo s:index_map 
-    "s:index_map[s:index_file]=s:index
-    call system("echo \"".s:index_map."\" >".s:index_file)
 endf
 
 func s:SetIndex()
     let l:my_index=input("please input correct index:")
     let s:index=l:my_index
-    "echo type(l:my_index)
-    "if type(l:my_index) >0 
-    "    let s:index=1
-    "else
-    "    let s:index=l:my_index
-    "endif
 endf
-function InsertCmd( cmd )
-       exe ':silent !'.a:cmd.' > /tmp/vim.insert.xxx 2>/dev/null'
-       "let l = readfile( '/tmp/vim.insert.xxx', '', 1 )
-       "exe "normal a".l[0]
-       redraw!
-endfunction
-
         
-func ReadConfig()
-    let s:index_map=system("cat ".s:index_file)
-    echo s:index_map
-    echo s:index_map[\"s:index_file\"]
-endf
-
 func s:ReadQuestion()
-    "let l:index_store=system("cat ".s:index_file)
-    "echo l:index_store
-    call ReadConfig()
-
-    "call setline(".",s:mycontent[s:index][2])
-    "let s:index=s:index+1
+    call setline(".",s:mycontent[s:index][2])
+    let s:index=s:index+1
 endf
 func s:ReadAnswer()
     call setline(".",s:mycontent[s:index-1][1])
@@ -152,8 +111,6 @@ func GetContentList(file_path)
     return l:result_list
 endfunc
 func MySplit(content)
-    "echo a:content
-    "echo type(a:content)
     let l:good_content=split(a:content,"]")
     "echo l:good_content
     let good_word=l:good_content[1]
@@ -161,22 +118,6 @@ func MySplit(content)
     let words=split(good_word,"(")
     let first_word=join(words[0:-2])
     let second_word=substitute(words[-1],")","",'g')
-    "echo first_word
-    "echo second_word
-    return [1,first_word,second_word]
-endf
-
-
-func MySplit2(content)
-    "echo a:content
-    "echo type(a:content)
-    let l:good_content=split(a:content,"]")
-    "echo l:good_content
-    let good_word=l:good_content[1]
-    "echo good_word
-    let words=split(good_word,"(")
-    let first_word=string(words[0:-2])
-    let second_word=words[-1]
     "echo first_word
     "echo second_word
     return [1,first_word,second_word]
