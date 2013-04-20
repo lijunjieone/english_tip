@@ -20,6 +20,8 @@ let g:loaded_learneng=1
 let s:save_cpo = &cpo
 "let s:tmpfile="/tmp/my/2.txt"
 let s:index=0
+let s:index_file="/tmp/index_file.txt"
+let s:index_map={}
 set cpo&vim
 
 if !hasmapto('<Plug>LearnengMain')
@@ -44,27 +46,49 @@ noremap <unique> <script> <Plug>LearnengSetIndex <SID>SetIndex
 noremap <SID>SetIndex :call <SID>SetIndex()<CR>
 
 func s:Main()
-    let l:file_path=input("please input your file path:")
-    let s:mycontent=GetContentList(l:file_path)
+    let s:file_path=input("please input your file path:")
+    if exists("s:mycontent")
+        let l:prompt=input("Are you sure learn new lesson,Y|N")
+        if match("Y|y",l:prompt)>0
+            let s:mycontent=GetContentList(s:file_path)
+        else
+            return
+        endif
+    endif
+            
+    let s:mycontent=GetContentList(s:file_path)
+    "let s:index=l:index_store
     "echo s:mycontent
 endf
+
+
+
 
 func s:ReadAnswerAndQuestion()
     let line=line(".")
     "echo line
     if line == 1
-        call setline(line,s:mycontent[s:index][2])
+        call setline(line,s:index." ".s:mycontent[s:index][2])
     else
         call setline(line+1,s:mycontent[s:index][1])
-        call setline(line+2,s:mycontent[s:index+1][2])
+        call setline(line+2,s:index+1." ".s:mycontent[s:index+1][2])
         call cursor(line+3,0)
         let s:index=s:index+1
+        "call WriteIndex()
+        "call InsertCmd("ls")
     endif
     "echo s:index
 endf
 
-func s:WriteIndex()
-    call system("cat ".s:index."> /tmp/eng_index.txt")
+func WriteIndex()
+    "echo s:index_file
+    "echo s:index
+    "exe ":echo ".s:index."> ".s:index_file
+    "let s:index_map[s:index_file]=s:index
+    let s:index_map["test"]=s:index 
+    echo s:index_map 
+    "s:index_map[s:index_file]=s:index
+    call system("echo \"".s:index_map."\" >".s:index_file)
 endf
 
 func s:SetIndex()
@@ -77,12 +101,27 @@ func s:SetIndex()
     "    let s:index=l:my_index
     "endif
 endf
+function InsertCmd( cmd )
+       exe ':silent !'.a:cmd.' > /tmp/vim.insert.xxx 2>/dev/null'
+       "let l = readfile( '/tmp/vim.insert.xxx', '', 1 )
+       "exe "normal a".l[0]
+       redraw!
+endfunction
 
         
+func ReadConfig()
+    let s:index_map=system("cat ".s:index_file)
+    echo s:index_map
+    echo s:index_map[\"s:index_file\"]
+endf
 
 func s:ReadQuestion()
-    call setline(".",s:mycontent[s:index][2])
-    let s:index=s:index+1
+    "let l:index_store=system("cat ".s:index_file)
+    "echo l:index_store
+    call ReadConfig()
+
+    "call setline(".",s:mycontent[s:index][2])
+    "let s:index=s:index+1
 endf
 func s:ReadAnswer()
     call setline(".",s:mycontent[s:index-1][1])
