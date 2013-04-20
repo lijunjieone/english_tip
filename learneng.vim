@@ -6,7 +6,7 @@
 "License: This file is placed in the public domain.
 "读取一个文件中的内容，转化为列表数据
 "显示某一条数据到当前行中
-"获取当前行数据跟列表中某条数据进行比较
+"自己维护序列，下次可以读取下一条
 
 
 "avoid load script twice
@@ -27,6 +27,7 @@ if !hasmapto('<Plug>LearnengMain')
     map <unique> <Leader>lq <Plug>LearnengReadQuestion
     map <unique> <Leader>la <Plug>LearnengReadAnswer
     map <unique> <Leader>lf <Plug>LearnengReadAnswerAndQuestion
+    map <unique> <Leader>li <Plug>LearnengSetIndex
 endif
 noremap <unique> <script> <Plug>LearnengMain <SID>Main
 noremap <SID>Main :call <SID>Main()<CR>
@@ -39,6 +40,8 @@ noremap <SID>ReadAnswer :call <SID>ReadAnswer()<CR>
 noremap <unique> <script> <Plug>LearnengReadAnswerAndQuestion <SID>ReadAnswerAndQuestion
 noremap <SID>ReadAnswerAndQuestion :call <SID>ReadAnswerAndQuestion()<CR>
 
+noremap <unique> <script> <Plug>LearnengSetIndex <SID>SetIndex
+noremap <SID>SetIndex :call <SID>SetIndex()<CR>
 
 func s:Main()
     let l:file_path=input("please input your file path:")
@@ -59,6 +62,23 @@ func s:ReadAnswerAndQuestion()
     endif
     "echo s:index
 endf
+
+func s:WriteIndex()
+    call system("cat ".s:index."> /tmp/eng_index.txt")
+endf
+
+func s:SetIndex()
+    let l:my_index=input("please input correct index:")
+    let s:index=l:my_index
+    "echo type(l:my_index)
+    "if type(l:my_index) >0 
+    "    let s:index=1
+    "else
+    "    let s:index=l:my_index
+    "endif
+endf
+
+        
 
 func s:ReadQuestion()
     call setline(".",s:mycontent[s:index][2])
