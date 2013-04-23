@@ -61,14 +61,19 @@ endf
 func s:ReadAnswerAndQuestion()
     let line=line(".")
     "echo line
-    if line == 1
+    if s:index == 0
         call setline(line,s:index." ".s:mycontent[s:index][2])
+    elseif s:index == len(s:mycontent)-1
+        call setline(line+1,s:mycontent[s:index][1])
+        call cursor(line+1,0)
+        let s:index=0
     else
         call setline(line+1,s:mycontent[s:index][1])
         call setline(line+2,s:index+1." ".s:mycontent[s:index+1][2])
         call cursor(line+3,0)
         let s:index=s:index+1
     endif
+    echo s:index."/".len(s:mycontent)
 endf
 
 func s:SetIndex()
