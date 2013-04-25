@@ -28,6 +28,7 @@ if !hasmapto('<Plug>LearnengMain')
     "map <unique> <Leader>la <Plug>LearnengReadAnswer
     map <unique> <Leader>lf <Plug>LearnengReadAnswerAndQuestion
     map <unique> <Leader>li <Plug>LearnengSetIndex
+    map <unique> <Leader>lr <Plug>LearnengWriteUnknownWord
 endif
 noremap <unique> <script> <Plug>LearnengMain <SID>Main
 noremap <SID>Main :call <SID>Main()<CR>
@@ -43,6 +44,9 @@ noremap <SID>ReadAnswerAndQuestion :call <SID>ReadAnswerAndQuestion()<CR>
 noremap <unique> <script> <Plug>LearnengSetIndex <SID>SetIndex
 noremap <SID>SetIndex :call <SID>SetIndex()<CR>
 
+noremap <unique> <script> <Plug>LearnengWriteUnknownWord <SID>WriteUnknownWord
+noremap <SID>WriteUnknownWord :call <SID>WriteUnknownWord()<CR>
+
 func s:Main()
     let s:file_path=input("please input your file path:")
     if exists("s:mycontent")
@@ -57,12 +61,19 @@ func s:Main()
     let s:mycontent=GetContentList(s:file_path)
 endf
 
+func s:WriteUnknownWord()
+    let l:tmp=s:mycontent[s:index]
+    let l:record="[".l:tmp[0]."]".l:tmp[1]."(".l:tmp[2].")"
+    echo l:record
+    call system("echo \"".l:record."\" >> ".s:file_path.".record")
+endf
 
 func s:ReadAnswerAndQuestion()
     let line=line(".")
     "echo line
     if s:index == 0
         call setline(line,s:index." ".s:mycontent[s:index][2])
+        let s:index=s:index+1
     elseif s:index == len(s:mycontent)-1
         call setline(line+1,s:mycontent[s:index][1])
         call cursor(line+1,0)
